@@ -45,3 +45,16 @@ for (let indexColumn = 0; indexColumn < 5; indexColumn += 1) {
 }
 
 // código.
+
+function selectColor(event) {
+  const previousSelected = document.querySelector('.selected');
+  if (previousSelected) {
+    previousSelected.classList.remove('selected');
+  }
+  event.target.classList.add('selected');
+}
+
+for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv++) {
+  const div = colorPaletteDiv.children[indexDiv];
+  div.addEventListener('click', selectColor);
+}
