@@ -58,3 +58,13 @@ for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv++) {
   const div = colorPaletteDiv.children[indexDiv];
   div.addEventListener('click', selectColor);
 }
+
+function colorize(event) {
+  const selected = document.querySelector('.selected');
+  event.target.style.backgroundColor = selected.style.backgroundColor;
+}
+
+for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
+  const div = pageDiv.children[indexDiv];
+  div.addEventListener('click', colorize);
+}
