@@ -7,29 +7,41 @@ const main = document.createElement('main');
 const mainDiv = document.createElement('div');
 const mainH1 = document.createElement('h1');
 const colorPaletteDiv = document.createElement('div');
+const pageDiv = document.createElement('div');
 
 // configurar elementos.
 mainH1.innerText = 'Paleta de Cores';
 mainH1.id = 'title';
 colorPaletteDiv.id = 'color-palette';
+pageDiv.id = 'pixel-board';
+pageDiv.style.display = 'grid';
+pageDiv.style.gridTemplateColumns = 'repeat(5, 40px)';
+pageDiv.style.gridTemplateRows = 'repeat(5, 40px)';
 
 // conectando elementos.
 body.appendChild(main);
 main.appendChild(mainDiv);
 mainDiv.appendChild(mainH1);
 mainDiv.appendChild(colorPaletteDiv);
+mainDiv.appendChild(pageDiv);
 
 // criando elementos com laço for aqui.
 colors = ['green', 'black', 'yellow', 'red'];
 for (let indexDiv = 0; indexDiv < 4; indexDiv += 1) {
   const div = document.createElement('div');
   div.classList.add('color');
-  div.style.border = "1px solid black";
-  div.style.display = 'inline-block';
-  div.style.padding = '40px';
-  div.style.marginRight = '5px';
+  div.classList.add('square');
   div.style.backgroundColor = colors[indexDiv];
   colorPaletteDiv.appendChild(div);
+}
+
+for (let indexColumn = 0; indexColumn < 5; indexColumn += 1) {
+  for (let indexDiv = 0; indexDiv < 5; indexDiv += 1) {
+    const div = document.createElement('div');
+    div.classList.add('pixel');
+    div.classList.add('square');
+    pageDiv.appendChild(div);
+  }
 }
 
 // código.
