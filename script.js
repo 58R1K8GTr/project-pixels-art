@@ -10,19 +10,30 @@ const colorPaletteDiv = document.createElement('div');
 const pageDiv = document.createElement('div');
 const buttonClear = document.createElement('button');
 const buttonGenerateRandomColors = document.createElement('button');
+const inputSize = document.createElement('input');
+const buttonVQV = document.createElement('button');
 
 // configurar elementos.
 mainH1.innerText = 'Paleta de Cores';
 mainH1.id = 'title';
 colorPaletteDiv.id = 'color-palette';
 pageDiv.id = 'pixel-board';
+pageDiv.style.display = 'grid';
+pageDiv.style.gridTemplateColumns = 'repeat(5, 40px)';
+pageDiv.style.gridTemplateRows = 'repeat(5, 40px)';
 buttonClear.id = 'clear-board';
 buttonClear.innerText = 'Limpar';
-buttonClear.classList.add('buttons');
+buttonClear.classList.add('widgets');
 buttonGenerateRandomColors.id = 'button-random-color';
 buttonGenerateRandomColors.innerText = 'Cores aleatórias';
-buttonGenerateRandomColors.style.display = 'inline-block';
-buttonGenerateRandomColors.classList.add('buttons');
+buttonGenerateRandomColors.classList.add('widgets');
+inputSize.id = 'board-size';
+inputSize.classList.add('widgets');
+inputSize.type = 'number';
+inputSize.min = 1;
+buttonVQV.innerText = 'VQV';
+buttonVQV.id = 'generate-board';
+buttonVQV.classList.add('widgets');
 
 // conectando elementos.
 body.appendChild(main);
@@ -31,10 +42,12 @@ mainDiv.appendChild(mainH1);
 mainDiv.appendChild(colorPaletteDiv);
 mainDiv.appendChild(buttonClear);
 mainDiv.appendChild(buttonGenerateRandomColors);
+mainDiv.appendChild(inputSize);
+mainDiv.appendChild(buttonVQV);
 mainDiv.appendChild(pageDiv);
 
 // criando elementos com laço for aqui.
-colors = ['green', 'black', 'yellow', 'red'];
+const colors = ['green', 'black', 'yellow', 'red'];
 for (let indexDiv = 0; indexDiv < 4; indexDiv += 1) {
   const div = document.createElement('div');
   div.classList.add('color');
@@ -67,6 +80,21 @@ function selectColor(event) {
 for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv += 1) {
   const div = colorPaletteDiv.children[indexDiv];
   div.addEventListener('click', selectColor);
+}
+
+function saveColorsPalette(colorsToSave, forceSave) {
+  const colorsOldVerify = window.localStorage.getItem('colors');
+  if (!forceSave && colorsOldVerify) { return; }
+  window.localStorage.setItem('colors', JSON.stringify(colorsToSave));
+}
+
+function getColorsFromPageDivChildren() {
+  const colorsToReturn = [];
+  for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
+    const div = pageDiv.children[indexDiv];
+    colorsToReturn.push(div.style.backgroundColor);
+  }
+  return colorsToReturn;
 }
 
 function colorizeDiv(event) {
@@ -108,23 +136,42 @@ function randomColorizeDivs() {
 
 buttonGenerateRandomColors.addEventListener('click', randomColorizeDivs);
 
-function saveColorsPalette(colors, forceSave) {
-  let colorsOld = window.localStorage.getItem('colors');
-  if (!forceSave) {
-    if (colorsOld) {
-      return;
-    }
-  }
-  window.localStorage.setItem('colors', JSON.stringify(colors));
-}
-
-function getColorsFromPageDivChildren() {
-  const colors = [];
-  for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
-    const div = pageDiv.children[indexDiv];
-    colors.push(div.style.backgroundColor);
-  }
-  return colors;
-}
-
 saveColorsPalette(getColorsFromPageDivChildren(), false);
+
+function removeDivsFromPageDiv() {
+  while (pageDiv.firstElementChild) {
+    pageDiv.removeChild(pageDiv.firstElementChild);
+  }
+}
+
+function addEventListenerToPageDiv() {
+  const length = pageDiv.children.length;
+  for (let indexDiv = 0; indexDiv < length; indexDiv += 1) {
+    const div = pageDiv.children[indexDiv];
+    div.addEventListener('click', colorizeDiv);
+  }
+}
+
+function reshape() {
+  removeDivsFromPageDiv();
+  for (let indexDiv = 0; indexDiv < inputSize.value ** 2; indexDiv += 1) {
+    const div = document.createElement('div');
+    div.classList.add('pixel');
+    div.classList.add('square');
+    pageDiv.appendChild(div);
+  }
+  addEventListenerToPageDiv();
+  pageDiv.style.gridTemplateColumns = `repeat(${inputSize.value}, 40px)`;
+  pageDiv.style.gridTemplateRows = `repeat(${inputSize.value}, 40px)`;
+}
+
+function verifyConditionsReshape() {
+  if (!inputSize.value) {
+    alert('Board inválido!');
+    return;
+  }
+  if (inputSize.value < 1) { return }
+  reshape();
+}
+
+buttonVQV.addEventListener('click', verifyConditionsReshape);
