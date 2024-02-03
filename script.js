@@ -9,17 +9,20 @@ const mainH1 = document.createElement('h1');
 const colorPaletteDiv = document.createElement('div');
 const pageDiv = document.createElement('div');
 const buttonClear = document.createElement('button');
+const buttonGenerateRandomColors = document.createElement('button');
 
 // configurar elementos.
 mainH1.innerText = 'Paleta de Cores';
 mainH1.id = 'title';
 colorPaletteDiv.id = 'color-palette';
 pageDiv.id = 'pixel-board';
-pageDiv.style.display = 'grid';
-pageDiv.style.gridTemplateColumns = 'repeat(5, 40px)';
-pageDiv.style.gridTemplateRows = 'repeat(5, 40px)';
 buttonClear.id = 'clear-board';
 buttonClear.innerText = 'Limpar';
+buttonClear.classList.add('buttons');
+buttonGenerateRandomColors.id = 'button-random-color';
+buttonGenerateRandomColors.innerText = 'Cores aleatórias';
+buttonGenerateRandomColors.style.display = 'inline-block';
+buttonGenerateRandomColors.classList.add('buttons');
 
 // conectando elementos.
 body.appendChild(main);
@@ -27,6 +30,7 @@ main.appendChild(mainDiv);
 mainDiv.appendChild(mainH1);
 mainDiv.appendChild(colorPaletteDiv);
 mainDiv.appendChild(buttonClear);
+mainDiv.appendChild(buttonGenerateRandomColors);
 mainDiv.appendChild(pageDiv);
 
 // criando elementos com laço for aqui.
@@ -63,21 +67,39 @@ for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv += 1
   div.addEventListener('click', selectColor);
 }
 
-function colorize(event) {
+function colorizeDiv(event) {
   const selected = document.querySelector('.selected');
   event.target.style.backgroundColor = selected.style.backgroundColor;
 }
 
 for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
   const div = pageDiv.children[indexDiv];
-  div.addEventListener('click', colorize);
+  div.addEventListener('click', colorizeDiv);
 }
 
 function clearAllSquares() {
-  for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv++) {
+  for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
     const div = pageDiv.children[indexDiv];
     div.style.backgroundColor = 'white';
   }
 }
 
 buttonClear.addEventListener('click', clearAllSquares);
+
+function generateRandomColor() {
+  const letters = '123456789ABCDEF';
+  let color = '#';
+  for (let indexLetter = 0; indexLetter < 6; indexLetter += 1) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function randomColorizeDivs() {
+  for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv += 1) {
+    const div = colorPaletteDiv.children[indexDiv];
+    div.style.background = generateRandomColor();
+  }
+}
+
+buttonGenerateRandomColors.addEventListener('click', randomColorizeDivs);
