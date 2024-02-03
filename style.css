@@ -10,12 +10,7 @@
   margin-right: 5px;
 }
 
-#pixel-board {
-  display: grid;
-  grid-template-columns: repeat(5, 40px);
-  grid-template-rows: repeat(5, 40px);
-}
-
-.buttons {
+.widgets {
   margin-right: 5px;
+  display: inline-block;
 }
