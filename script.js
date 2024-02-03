@@ -43,13 +43,15 @@ for (let indexDiv = 0; indexDiv < 4; indexDiv += 1) {
   colorPaletteDiv.appendChild(div);
 }
 
-for (let indexColumn = 0; indexColumn < 5; indexColumn += 1) {
-  for (let indexDiv = 0; indexDiv < 5; indexDiv += 1) {
-    const div = document.createElement('div');
-    div.classList.add('pixel');
-    div.classList.add('square');
-    pageDiv.appendChild(div);
+const colorsOld = JSON.parse(window.localStorage.getItem('colors'));
+for (let indexColumn = 0; indexColumn < 25; indexColumn += 1) {
+  const div = document.createElement('div');
+  div.classList.add('pixel');
+  div.classList.add('square');
+  if (colorsOld) {
+    div.style.backgroundColor = colorsOld[indexColumn];
   }
+  pageDiv.appendChild(div);
 }
 
 // código.
@@ -70,6 +72,7 @@ for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv += 1
 function colorizeDiv(event) {
   const selected = document.querySelector('.selected');
   event.target.style.backgroundColor = selected.style.backgroundColor;
+  saveColorsPalette(getColorsFromPageDivChildren(), true);
 }
 
 for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
@@ -82,6 +85,7 @@ function clearAllSquares() {
     const div = pageDiv.children[indexDiv];
     div.style.backgroundColor = 'white';
   }
+  saveColorsPalette(getColorsFromPageDivChildren(), true);
 }
 
 buttonClear.addEventListener('click', clearAllSquares);
@@ -98,8 +102,29 @@ function generateRandomColor() {
 function randomColorizeDivs() {
   for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv += 1) {
     const div = colorPaletteDiv.children[indexDiv];
-    div.style.background = generateRandomColor();
+    div.style.backgroundColor = generateRandomColor();
   }
 }
 
 buttonGenerateRandomColors.addEventListener('click', randomColorizeDivs);
+
+function saveColorsPalette(colors, forceSave) {
+  let colorsOld = window.localStorage.getItem('colors');
+  if (!forceSave) {
+    if (colorsOld) {
+      return;
+    }
+  }
+  window.localStorage.setItem('colors', JSON.stringify(colors));
+}
+
+function getColorsFromPageDivChildren() {
+  const colors = [];
+  for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
+    const div = pageDiv.children[indexDiv];
+    colors.push(div.style.backgroundColor);
+  }
+  return colors;
+}
+
+saveColorsPalette(getColorsFromPageDivChildren(), false);
