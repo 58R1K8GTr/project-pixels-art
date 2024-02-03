@@ -31,6 +31,7 @@ inputSize.id = 'board-size';
 inputSize.classList.add('widgets');
 inputSize.type = 'number';
 inputSize.min = 1;
+inputSize.max = 50;
 buttonVQV.innerText = 'VQV';
 buttonVQV.id = 'generate-board';
 buttonVQV.classList.add('widgets');
@@ -152,17 +153,17 @@ function addEventListenerToPageDiv() {
   }
 }
 
-function reshape() {
+function reshape(value) {
   removeDivsFromPageDiv();
-  for (let indexDiv = 0; indexDiv < inputSize.value ** 2; indexDiv += 1) {
+  for (let indexDiv = 0; indexDiv < value ** 2; indexDiv += 1) {
     const div = document.createElement('div');
     div.classList.add('pixel');
     div.classList.add('square');
     pageDiv.appendChild(div);
   }
   addEventListenerToPageDiv();
-  pageDiv.style.gridTemplateColumns = `repeat(${inputSize.value}, 40px)`;
-  pageDiv.style.gridTemplateRows = `repeat(${inputSize.value}, 40px)`;
+  pageDiv.style.gridTemplateColumns = `repeat(${value}, 40px)`;
+  pageDiv.style.gridTemplateRows = `repeat(${value}, 40px)`;
 }
 
 function verifyConditionsReshape() {
@@ -170,8 +171,14 @@ function verifyConditionsReshape() {
     alert('Board inválido!');
     return;
   }
-  if (inputSize.value < 1) { return }
-  reshape();
+  let value = inputSize.value;
+  if (value < 1) { return }
+  if (value < 5) {
+    value = 5;
+  } else if (value > 50) {
+    value = 50;
+  }
+  reshape(value);
 }
 
 buttonVQV.addEventListener('click', verifyConditionsReshape);
