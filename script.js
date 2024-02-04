@@ -14,13 +14,20 @@ const inputSize = document.createElement('input');
 const buttonVQV = document.createElement('button');
 
 // configurar elementos.
+function loadLengthPageDiv() {
+  return JSON.parse(window.localStorage.getItem('length'));
+} // obrigatório criar aqui.
+
 mainH1.innerText = 'Paleta de Cores';
 mainH1.id = 'title';
 colorPaletteDiv.id = 'color-palette';
 pageDiv.id = 'pixel-board';
 pageDiv.style.display = 'grid';
-pageDiv.style.gridTemplateColumns = 'repeat(5, 40px)';
-pageDiv.style.gridTemplateRows = 'repeat(5, 40px)';
+const lengthItems = loadLengthPageDiv();
+let repeat = 5;
+if (lengthItems) { repeat = lengthItems[1]}
+pageDiv.style.gridTemplateColumns = `repeat(${repeat}, 40px)`;
+pageDiv.style.gridTemplateRows = `repeat(${repeat}, 40px)`;
 buttonClear.id = 'clear-board';
 buttonClear.innerText = 'Limpar';
 buttonClear.classList.add('widgets');
@@ -58,7 +65,9 @@ for (let indexDiv = 0; indexDiv < 4; indexDiv += 1) {
 }
 
 const colorsOld = JSON.parse(window.localStorage.getItem('colors'));
-for (let indexColumn = 0; indexColumn < 25; indexColumn += 1) {
+let length = 25;
+if (lengthItems) { length = lengthItems[0] }
+for (let indexColumn = 0; indexColumn < length; indexColumn += 1) {
   const div = document.createElement('div');
   div.classList.add('pixel');
   div.classList.add('square');
@@ -85,7 +94,7 @@ for (let indexDiv = 0; indexDiv < colorPaletteDiv.children.length; indexDiv += 1
 
 function saveColorsPalette(colorsToSave, forceSave) {
   const colorsOldVerify = window.localStorage.getItem('colors');
-  if (!forceSave && colorsOldVerify) { return; }
+  if (!forceSave && colorsOldVerify) { return }
   window.localStorage.setItem('colors', JSON.stringify(colorsToSave));
 }
 
@@ -98,10 +107,16 @@ function getColorsFromPageDivChildren() {
   return colorsToReturn;
 }
 
+function saveLengthPageDiv(valueRepeat) {
+  const itens = JSON.stringify([pageDiv.children.length, valueRepeat]);
+  window.localStorage.setItem('length', itens);
+}
+
 function colorizeDiv(event) {
   const selected = document.querySelector('.selected');
   event.target.style.backgroundColor = selected.style.backgroundColor;
   saveColorsPalette(getColorsFromPageDivChildren(), true);
+  saveLengthPageDiv(repeat);
 }
 
 for (let indexDiv = 0; indexDiv < pageDiv.children.length; indexDiv += 1) {
@@ -115,6 +130,7 @@ function clearAllSquares() {
     div.style.backgroundColor = 'white';
   }
   saveColorsPalette(getColorsFromPageDivChildren(), true);
+  saveLengthPageDiv(repeat);
 }
 
 buttonClear.addEventListener('click', clearAllSquares);
@@ -138,6 +154,7 @@ function randomColorizeDivs() {
 buttonGenerateRandomColors.addEventListener('click', randomColorizeDivs);
 
 saveColorsPalette(getColorsFromPageDivChildren(), false);
+saveLengthPageDiv(repeat);
 
 function removeDivsFromPageDiv() {
   while (pageDiv.firstElementChild) {
@@ -171,14 +188,16 @@ function verifyConditionsReshape() {
     alert('Board inválido!');
     return;
   }
-  let value = inputSize.value;
-  if (value < 1) { return }
-  if (value < 5) {
-    value = 5;
-  } else if (value > 50) {
-    value = 50;
+  repeat = Number(inputSize.value);
+  if (repeat < 1) { return }
+  if (repeat < 5) {
+    repeat = 5;
+  } else if (repeat > 50) {
+    repeat = 50;
   }
-  reshape(value);
+  reshape(repeat);
+  saveColorsPalette(getColorsFromPageDivChildren(), true);
+  saveLengthPageDiv(repeat);
 }
 
 buttonVQV.addEventListener('click', verifyConditionsReshape);
