@@ -1,10 +1,19 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# Projeto pixels art
+
+# Funcionalidades do projeto:
+  - Fazer com que seja desenhado na tela quadrados que chamaremos de pixeis.
+  - Cada quadrado pode ser colorido ou recolorido com uma cor.
+  - Conseguimos aumentar ou diminuir a área dos quadrados pelo **input number** e apertando em **VQV**.
+  - É possível limpar as cores apertando no botão **limpar**.
+
+## Aprendizado:
+  - Neste projeto eu aprendi sobre o javascript DOM.
+
+## Ferramentas:
+  - html;
+  - javascript;
+  - css;
+  - live-server no vscode.
+
+## Como rodar:
+  - Abra o arquivo index.html no navegador.
