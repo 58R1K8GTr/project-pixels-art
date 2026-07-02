@@ -16,4 +16,4 @@
   - live-server no vscode.
 
 ## Como rodar:
-  - abra o site local http://localhost:5500
+  - Abra o arquivo index.html no navegador.
